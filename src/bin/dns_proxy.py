@@ -66,14 +66,15 @@ class SplunkDNSLogger:
 
     def log_reply(self,handler,reply):
         if reply.header.rcode == RCODE.NOERROR:
-            self.print_message("%sReply: [%s:%d] (%s) / '%s' (%s) / RRs: %s" % (
-                    self.log_prefix(handler),
-                    handler.client_address[0],
-                    handler.client_address[1],
-                    handler.protocol,
-                    reply.q.qname,
-                    QTYPE[reply.q.qtype],
-                    ",".join([QTYPE[a.rtype] for a in reply.rr])))
+            self.writer.write_event({
+                'type': 'reply',
+                'client_address': handler.client_address[0],
+                'client_port': handler.client_address[1],
+                'protocol': handler.protocol,
+                'query_name': reply.q.qname,
+                'response_type': QTYPE[reply.q.qtype],
+                'response_records': ",".join([QTYPE[a.rtype] for a in reply.rr])
+            })
         else:
             self.print_message("%sReply: [%s:%d] (%s) / '%s' (%s) / %s" % (
                     self.log_prefix(handler),
