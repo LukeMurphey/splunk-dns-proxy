@@ -1,0 +1,5 @@
+
+<project default="package" name="dns_proxy">
+	<import file="basebuild.xml"/>
+</project>
+		
