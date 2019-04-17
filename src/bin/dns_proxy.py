@@ -146,18 +146,27 @@ class DNSProxyInput(ModularInput):
         upstream_dns_server, _, upstream_dns_port = upstream_dns.partition(':')
         upstream_dns_port = int(upstream_dns_port or 53)
 
-        resolver = ProxyResolver(upstream_dns_server, port, 5)
-        handler = PassthroughDNSHandler
-        #dns_logger = DNSLogger("request,reply,truncated,error", False)
+        resolver = ProxyResolver(upstream_dns_server, upstream_dns_port, 5)
+        handler = PassthroughDNSHandler # or ProxyResolver
         dns_logger = SplunkDNSLogger(index, source, sourcetype)
 
+        # Start the UDP server
         self.udp_server = DNSServer(resolver,
-                               port=port,
-                               address=address,
-                               logger=dns_logger,
-                               handler=handler)
+                                    port=port,
+                                    address=address,
+                                    logger=dns_logger,
+                                    handler=handler)
 
         self.udp_server.start_thread()
+
+        # Start the TCP server
+        self.tcp_server = DNSServer(resolver,
+                               port=port,
+                               address=address,
+                               tcp=True,
+                               logger=dns_logger,
+                               handler=handler)
+        self.tcp_server.start_thread()
 
 if __name__ == '__main__':
     DNSProxyInput.instantiate_and_execute()
