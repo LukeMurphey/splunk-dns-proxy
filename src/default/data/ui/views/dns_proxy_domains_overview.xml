@@ -1,6 +1,6 @@
 <form>
   <label>Domain Overview</label>
-  <fieldset submitButton="true">
+  <fieldset submitButton="true" autoRun="true">
     <input type="time" token="field1">
       <label></label>
       <default>
