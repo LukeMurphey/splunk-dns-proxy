@@ -2,7 +2,6 @@
   <view name="dns_proxy_domains_overview" default="true" />
   <collection label="Health">
   	<view name="dns_proxy_logs" />
-  	<view name="dns_proxy_status" />
   </collection>
   <collection label="Search">
   	<view name="search" />

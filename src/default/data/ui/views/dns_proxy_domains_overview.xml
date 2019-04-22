@@ -29,7 +29,28 @@
         <option name="wrap">true</option>
       </table>
     </panel>
-      <panel>
+    <panel>
+      <title>Top Domains, Second Level (by query count)</title>
+      <table>
+        <search>
+          <query>sourcetype="dns_proxy" type=reply | `get_second_level_domain(query_name, second_level_domain)` | stats sparkline count distinct_count(client_address) as clients by second_level_domain | sort -count</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Top Client DNS Queries</title>
       <table>
         <search>
